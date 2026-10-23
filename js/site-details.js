@@ -1,4 +1,6 @@
-
+/* ==========================================================================
+   site-details.js - Shahad's Page Logic (Modern Gallery & Fixed Data Mapping)
+   ========================================================================== */
 (function () {
   "use strict";
 
@@ -6,36 +8,36 @@
 
   const TEXT = {
     ar: {
-      back: "العودة إلى المواقع التراثية",
+      back: "← العودة إلى المواقع التراثية",
       notFound: "الموقع غير موجود أو تعذر تحميل بياناته.",
       missing: "غير متوفر",
-      about: "نبذة عن الموقع",
+      about: "عن الموقع",
       visit: "معلومات الزيارة",
-      location: "الموقع / العنوان",
+      location: "الموقع والعنوان",
       hours: "ساعات العمل",
       category: "التصنيف",
-      reviews: "التقييمات والمراجعات",
-      noReviews: "لا توجد مراجعات لهذا الموقع بعد.",
-      count: "مراجعة",
+      reviews: "تقييمات الزوار",
+      noReviews: "لا توجد تقييمات لهذا الموقع بعد.",
+      count: "تقييم",
       photo: "الصورة غير متوفرة"
     },
     en: {
-      back: "Back to heritage sites",
+      back: "← Back to heritage sites",
       notFound: "The site could not be found or its data could not be loaded.",
       missing: "Not available",
-      about: "About this site",
-      visit: "Visit information",
-      location: "Location / address",
-      hours: "Working hours",
+      about: "About Site",
+      visit: "Visit Information",
+      location: "Location & Address",
+      hours: "Working Hours",
       category: "Classification",
-      reviews: "Ratings and reviews",
-      noReviews: "No reviews yet for this site.",
+      reviews: "Visitor Reviews",
+      noReviews: "No reviews for this site yet.",
       count: "reviews",
       photo: "Photo not available"
     }
   };
 
-  let lang = "ar", site = null;
+  let lang = "ar", site = null, currentPhotoIdx = 0, photos = [];
 
   function getLang() {
     if (window.Hayyak && typeof Hayyak.getLang === "function") return Hayyak.getLang();
@@ -57,51 +59,81 @@
     return list.find(s => String(s.siteID) === String(id) || String(s.id) === String(id)) || null;
   }
 
-  function renderPhotos() {
+  function setupGallery() {
     const main = $("details-main-photo");
     const note = $("details-photo-message");
     const thumbs = $("details-thumbnails");
-    if (!main || !thumbs) return;
+    const prevBtn = $("details-prev-btn");
+    const nextBtn = $("details-next-btn");
 
-    let photos = Array.isArray(site.photos) ? site.photos.filter(Boolean) : [];
-    thumbs.textContent = "";
+    if (!main) return;
 
+    photos = Array.isArray(site.photos) ? site.photos.filter(Boolean) : [];
     if (!photos.length) {
       main.hidden = true;
       if (note) { note.hidden = false; note.textContent = t("photo"); }
+      if (prevBtn) prevBtn.style.display = "none";
+      if (nextBtn) nextBtn.style.display = "none";
       return;
     }
 
-    function show(src) {
+    function showIndex(index) {
+      if (index < 0) index = photos.length - 1;
+      if (index >= photos.length) index = 0;
+      currentPhotoIdx = index;
+
       main.hidden = false;
       if (note) note.hidden = true;
       main.alt = lang === "ar" ? site.nameAr : site.nameEn;
-      main.onerror = () => {
-        main.hidden = true;
-        if (note) { note.hidden = false; note.textContent = t("photo"); }
-      };
-      main.src = src;
+      main.src = photos[currentPhotoIdx];
+
+      if (thumbs) {
+        const buttons = thumbs.querySelectorAll(".details-thumb-button");
+        buttons.forEach((btn, idx) => {
+          btn.classList.toggle("is-active", idx === currentPhotoIdx);
+        });
+      }
     }
 
-    show(photos[0]);
-
+    // إدارة اتجاه التنقل ليتوافق مع اللغة
     if (photos.length > 1) {
-      photos.forEach(src => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "details-thumb-button";
-        b.setAttribute("aria-label", lang === "ar" ? site.nameAr : site.nameEn);
-
-        const img = document.createElement("img");
-        img.src = src;
-        img.alt = "";
-        img.loading = "lazy";
-
-        b.appendChild(img);
-        b.addEventListener("click", () => show(src));
-        thumbs.appendChild(b);
-      });
+      const isRTL = lang === "ar";
+      if (prevBtn) {
+        prevBtn.style.display = "flex";
+        prevBtn.onclick = () => showIndex(currentPhotoIdx + (isRTL ? 1 : -1));
+      }
+      if (nextBtn) {
+        nextBtn.style.display = "flex";
+        nextBtn.onclick = () => showIndex(currentPhotoIdx + (isRTL ? -1 : 1));
+      }
+    } else {
+      if (prevBtn) prevBtn.style.display = "none";
+      if (nextBtn) nextBtn.style.display = "none";
     }
+
+    // بناء الصور المصغرة
+    if (thumbs) {
+      thumbs.textContent = "";
+      if (photos.length > 1) {
+        photos.forEach((src, idx) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "details-thumb-button" + (idx === 0 ? " is-active" : "");
+          b.setAttribute("aria-label", lang === "ar" ? site.nameAr : site.nameEn);
+
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = "";
+          img.loading = "lazy";
+
+          b.appendChild(img);
+          b.addEventListener("click", () => showIndex(idx));
+          thumbs.appendChild(b);
+        });
+      }
+    }
+
+    showIndex(0);
   }
 
   function renderReviews() {
@@ -208,11 +240,12 @@
     if ($("details-city")) $("details-city").textContent = city;
     if ($("details-description")) $("details-description").textContent = description;
     
+    // ربط الحقول بداتا sites.js مباشرة
     if ($("details-address")) $("details-address").textContent = site.address || t("missing");
     if ($("details-hours")) $("details-hours").textContent = site.workingHours || t("missing");
     if ($("details-category")) $("details-category").textContent = classification || t("missing");
 
-    renderPhotos();
+    setupGallery();
     renderReviews();
   }
 
