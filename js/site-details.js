@@ -1,6 +1,4 @@
-/* ==========================================================================
-   site-details.js - Shahad's Page Logic (Modern Gallery & Fixed Data Mapping)
-   ========================================================================== */
+
 (function () {
   "use strict";
 
@@ -95,23 +93,20 @@
       }
     }
 
-    // إدارة اتجاه التنقل ليتوافق مع اللغة
     if (photos.length > 1) {
-      const isRTL = lang === "ar";
       if (prevBtn) {
         prevBtn.style.display = "flex";
-        prevBtn.onclick = () => showIndex(currentPhotoIdx + (isRTL ? 1 : -1));
+        prevBtn.onclick = () => showIndex(currentPhotoIdx - 1);
       }
       if (nextBtn) {
         nextBtn.style.display = "flex";
-        nextBtn.onclick = () => showIndex(currentPhotoIdx + (isRTL ? -1 : 1));
+        nextBtn.onclick = () => showIndex(currentPhotoIdx + 1);
       }
     } else {
       if (prevBtn) prevBtn.style.display = "none";
       if (nextBtn) nextBtn.style.display = "none";
     }
 
-    // بناء الصور المصغرة
     if (thumbs) {
       thumbs.textContent = "";
       if (photos.length > 1) {
@@ -232,6 +227,8 @@
     const classification = lang === "ar" ? site.classificationAr : site.classificationEn;
     const city = lang === "ar" ? site.cityAr : site.cityEn;
     const description = lang === "ar" ? site.descriptionAr : site.descriptionEn;
+    const address = lang === "ar" ? site.addressAr : site.addressEn;
+    const workingHours = lang === "ar" ? site.workingHoursAr : site.workingHoursEn;
 
     document.title = name + " | Hayyak";
 
@@ -240,9 +237,8 @@
     if ($("details-city")) $("details-city").textContent = city;
     if ($("details-description")) $("details-description").textContent = description;
     
-    // ربط الحقول بداتا sites.js مباشرة
-    if ($("details-address")) $("details-address").textContent = site.address || t("missing");
-    if ($("details-hours")) $("details-hours").textContent = site.workingHours || t("missing");
+    if ($("details-address")) $("details-address").textContent = address || t("missing");
+    if ($("details-hours")) $("details-hours").textContent = workingHours || t("missing");
     if ($("details-category")) $("details-category").textContent = classification || t("missing");
 
     setupGallery();

@@ -1,6 +1,4 @@
-/* ==========================================================================
-   Hayyak Shared Styles + Site Details Page Styles (Full & Preserved)
-   ========================================================================== */
+
 
 :root {
   --ink: #1d2a23;
@@ -18,7 +16,7 @@
   --r: 16px;
   --f-body: "Almarai", "Segoe UI", Tahoma, system-ui, sans-serif;
   --wrap: 1180px;
-  --gold: var(--lavender); /* old name kept so nothing breaks */
+  --gold: var(--lavender);
 }
 
 * {
@@ -66,7 +64,6 @@ h1, h2, h3 {
   outline-offset: 2px;
 }
 
-/* ---------- Buttons ---------- */
 .btn {
   font: inherit;
   font-weight: 500;
@@ -211,7 +208,6 @@ h1, h2, h3 {
   border: 0;
 }
 
-/* ---------- Hero ---------- */
 .hero {
   position: relative;
   min-height: min(88vh, 640px);
@@ -297,7 +293,6 @@ h1, h2, h3 {
   outline: none;
 }
 
-/* ---------- Plan Your Visit (CTA) ---------- */
 .cta {
   display: grid;
   grid-template-columns: 1fr 1.4fr;
@@ -402,7 +397,6 @@ html[dir="ltr"] .cta-img::after {
   font-size: 0.85rem;
 }
 
-/* ---------- Sections & Cards ---------- */
 .section {
   padding-block: 2.5rem;
 }
@@ -455,7 +449,6 @@ html[dir="ltr"] .link-more:hover .arrow {
   transform: translateX(3px) rotate(45deg);
 }
 
-/* ---------- Marquee Track ---------- */
 .section:has(+ .marquee) {
   padding-bottom: 0;
 }
@@ -635,7 +628,6 @@ html[dir="ltr"] .link-more:hover .arrow {
   opacity: 0.85;
 }
 
-/* ---------- Footer ---------- */
 .site-footer {
   margin-top: 1rem;
   padding-top: 9rem;
@@ -718,7 +710,6 @@ html[dir="ltr"] .link-more:hover .arrow {
   opacity: 0.75;
 }
 
-/* ---------- Auth ---------- */
 .auth {
   padding-block: 3rem 2rem;
   background: var(--paper);
@@ -933,9 +924,7 @@ html[dir="ltr"] .link-more:hover .arrow {
   text-decoration: underline;
 }
 
-/* ==========================================================================
-   Site Details Page - Refined Lavender Touch & Sleek Small Glass Arrows
-   ========================================================================== */
+
 
 .details-page {
   max-width: 1000px;
@@ -959,7 +948,6 @@ html[dir="ltr"] .link-more:hover .arrow {
   text-decoration: underline;
 }
 
-/* ---------- Gallery & Compact Glass Arrows ---------- */
 .details-gallery {
   margin-bottom: 1.5rem;
 }
@@ -986,7 +974,6 @@ html[dir="ltr"] .link-more:hover .arrow {
   display: none;
 }
 
-/* أسهم زجاجية صغيرة وبسيطة ومريحة للعين */
 .details-arrow-btn {
   position: absolute;
   top: 50%;
@@ -995,7 +982,7 @@ html[dir="ltr"] .link-more:hover .arrow {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   color: var(--palm-dark);
@@ -1033,6 +1020,13 @@ html[dir="ltr"] .link-more:hover .arrow {
   inset-inline-end: 12px;
 }
 
+html[dir="rtl"] .details-arrow-btn.prev svg {
+  transform: rotate(180deg);
+}
+html[dir="rtl"] .details-arrow-btn.next svg {
+  transform: rotate(180deg);
+}
+
 .details-thumbnails {
   display: flex;
   flex-wrap: wrap;
@@ -1066,7 +1060,6 @@ html[dir="ltr"] .link-more:hover .arrow {
   object-fit: cover;
 }
 
-/* ---------- Details Heading & Badges ---------- */
 .details-heading {
   margin: 1.25rem 0 1.5rem;
   display: flex;
@@ -1101,7 +1094,6 @@ html[dir="ltr"] .link-more:hover .arrow {
   font-weight: 700;
 }
 
-/* ---------- Cards with Subtle Lavender Touch ---------- */
 .details-card {
   margin: 0 0 1.25rem;
   padding: 1.6rem;
@@ -1113,7 +1105,6 @@ html[dir="ltr"] .link-more:hover .arrow {
   overflow: hidden;
 }
 
-/* التدرج الناعم جداً باللافندر أسفل الكارد */
 .details-card::after {
   content: "";
   position: absolute;
@@ -1138,7 +1129,6 @@ html[dir="ltr"] .link-more:hover .arrow {
   font-size: 0.98rem;
 }
 
-/* ---------- Visit Info Grid ---------- */
 .details-info {
   display: grid;
   grid-template-columns: minmax(130px, max-content) 1fr;
@@ -1158,7 +1148,6 @@ html[dir="ltr"] .link-more:hover .arrow {
   line-height: 1.6;
 }
 
-/* ---------- Reviews List ---------- */
 .details-muted {
   color: var(--muted);
 }
